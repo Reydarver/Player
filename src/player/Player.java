@@ -40,8 +40,6 @@ public class Player {
             long currentTimestamp = System.currentTimeMillis();
             long lastKlineEndTimestamp = getJsonLastTimestamp(jsonTimestamp);
             
-            System.out.println(lastKlineEndTimestamp);
-            
             try {
                 System.out.println("URLConnection");
                 URL oracle = new URL("https://www.binance.com/api/v1/klines?symbol=QTUMETH&interval=15m"); // URL to Parse
@@ -72,7 +70,9 @@ public class Player {
     //                        System.out.println(period_21.getActualMean());
     //                        System.out.println(period_40.getActualMean());
 
-                            if(currentTimestamp > kline.getStartTime() && currentTimestamp < kline.getEndTime())
+                            // Check if the actual range needs to be procesed
+                            if( (lastKlineEndTimestamp < kline.getStartTime()) && 
+                                (currentTimestamp > kline.getStartTime() && currentTimestamp < kline.getEndTime()))
                             {
                                 System.out.println("in " + dateFormat.format(kline.getStartTime()));
                                 
@@ -86,7 +86,8 @@ public class Player {
                                     boolean period_21actual_over_period9_actual = (period_21.getActualMean() > period_9.getActualMean());
                                     if(period_9old_over_period21_old && period_21actual_over_period9_actual)
                                     {
-                                        System.out.println("SELL");
+                                        System.out.println(dateFormat.format(kline.getStartTime()));
+                                        System.out.println(" -order: SELL");
                                     }
 
                                     // Eloi's case 5 - Sell
@@ -94,7 +95,8 @@ public class Player {
                                     boolean period_9actual_over_period21_actual = (period_9.getActualMean() > period_21.getActualMean());
                                     if(period_21old_over_period9_old && period_9actual_over_period21_actual)
                                     {
-                                        System.out.println("BUY");
+                                        System.out.println(dateFormat.format(kline.getStartTime()));
+                                        System.out.println(" -order: BUY");
                                     }
                                 } 
 
@@ -114,7 +116,7 @@ public class Player {
 
                 Thread.sleep(1 * 60 * 1000); // milliseconds to a second
 
-            } catch(Exception e) {
+            } catch(IOException | InterruptedException | JSONException e) {
                 System.err.println(e);
             }
             
@@ -130,12 +132,10 @@ public class Player {
         if((line = br.readLine()) != null)
         {
             JSONObject json = new JSONObject(line);
-            System.out.println(json.toString());
             return json.getLong("Timestamp");
         }
         else 
         {
-            System.out.println("holaa");
             return 0;
         }
     }
