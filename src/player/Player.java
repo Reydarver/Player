@@ -160,8 +160,8 @@ public class Player {
             if( (lastKlineEndTimestamp < kline.getStartTime()) && 
                 (currentTimestamp > kline.getStartTime() && currentTimestamp < kline.getEndTime()))
             {
-                System.out.println("[" + dateFormat.format(kline.getStartTime()) + "] Coin: " + coinName );
-                logger.log(Level.INFO, "[Coin - Check] {0}", new Object[]{coinName});
+                //System.out.println("[" + dateFormat.format(kline.getStartTime()) + "] Coin: " + coinName );
+                //logger.log(Level.INFO, "[Coin - Check] {0}", new Object[]{coinName});
                 
                 // Check period_40 is the lowest
                 boolean period_40oldMeansmallest = (period_40.getOldMean() < period_21.getOldMean()) &&(period_40.getOldMean() < period_9.getOldMean());
@@ -173,7 +173,7 @@ public class Player {
                     boolean period_21actual_over_period9_actual = (period_21.getActualMean() > period_9.getActualMean());
                     if(period_9old_over_period21_old && period_21actual_over_period9_actual)
                     {
-                        System.out.println("\t-order: SELL");
+                        //System.out.println("\t-order: SELL");
                         logger.log(Level.INFO, "[Coin - SELL] {0} {1}", new Object[]{coinName, kline.getClosePrice()});
                         
                         // Send Mail
@@ -186,7 +186,7 @@ public class Player {
                     boolean period_9actual_over_period21_actual = (period_9.getActualMean() > period_21.getActualMean());
                     if(period_21old_over_period9_old && period_9actual_over_period21_actual)
                     {
-                        System.out.println("\t-order: BUY");
+                        //System.out.println("\t-order: BUY");
                         logger.log(Level.INFO, "[Coin - BUY] {0} {1}", new Object[]{coinName, kline.getClosePrice()});
                         
                         // Send Mail
